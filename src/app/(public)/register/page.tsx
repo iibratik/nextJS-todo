@@ -1,20 +1,16 @@
-"use client"
+'use client';
+
 import { Paper, Container, TextField, Button, Grid } from "@mui/material";
 import registerStyle from './register.module.scss'
-import { useState } from "react";
+import { useState, } from "react";
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-
-interface Field {
-    size: number,
-    name: string,
-    label: string,
-    type: string,
-    autoComplete?: string,
-    value: string,
-    error: string
-}
+import type { Field } from "@/types/field";
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from "../../features/authStore";
 
 export default function Register() {
+    const router = useRouter()
+
     const registerInputs = [
         {
             size: 6,
@@ -29,6 +25,14 @@ export default function Register() {
             name: 'last-name',
             label: 'Фамилия',
             type: 'name',
+            value: '',
+            error: ''
+        },
+        {
+            size: 12,
+            name: 'username',
+            label: 'Имя пользователя',
+            type: 'text',
             value: '',
             error: ''
         },
@@ -63,76 +67,120 @@ export default function Register() {
     ]
     const [registerFields, setRegisterFields] = useState(registerInputs)
 
-    function validateFields() {
+    function validateFields(): boolean {
         const updatedFields = [...registerFields];
         let validFields = true;
-        const getFieldValue = (name: string) =>
-            updatedFields.find(f => f.name === name)?.value || '';
-        updatedFields.forEach((field, index) => {
-            const sanitized = field.value.trim().replace(/[<>"']/g, '');
-            updatedFields[index].value = sanitized;
+
+        // Функция для получения значения поля по name
+        const getFieldValue = (name: string): string => {
+            const field = updatedFields.find(f => f.name === name);
+            return field?.value.trim().replace(/[<>"']/g, '') || '';
+        };
+
+        const sanitizedFields = updatedFields.map((field) => {
+            const sanitizedValue = field.value.trim().replace(/[<>"']/g, '');
+            let error = '';
 
             switch (field.name) {
                 case 'first-name':
                 case 'last-name':
-                    if (!sanitized) {
-                        updatedFields[index].error = 'Поле не может быть пустым';
+                    if (!sanitizedValue) {
+                        error = 'Поле не может быть пустым';
                         validFields = false;
-                    } else {
-                        updatedFields[index].error = '';
                     }
                     break;
 
                 case 'email':
-                    if (!sanitized) {
-                        updatedFields[index].error = 'Email обязателен';
+                    if (!sanitizedValue) {
+                        error = 'Email обязателен';
                         validFields = false;
-                    } else if (!sanitized.includes('@')) {
-                        updatedFields[index].error = 'Некорректный email';
+                    } else if (!sanitizedValue.includes('@')) {
+                        error = 'Некорректный email';
                         validFields = false;
-                    } else {
-                        updatedFields[index].error = '';
                     }
                     break;
 
                 case 'password':
-                    if (!sanitized) {
-                        updatedFields[index].error = 'Пароль обязателен';
+                    if (!sanitizedValue) {
+                        error = 'Пароль обязателен';
                         validFields = false;
-                    } else if (sanitized.length < 6) {
-                        updatedFields[index].error = 'Минимум 6 символов';
+                    } else if (sanitizedValue.length < 6) {
+                        error = 'Минимум 6 символов';
                         validFields = false;
-                    } else {
-                        updatedFields[index].error = '';
                     }
                     break;
 
                 case 'confirm-password':
                     const passwordValue = getFieldValue('password');
-                    if (!sanitized) {
-                        updatedFields[index].error = 'Подтверждение пароля обязательно';
+                    if (!sanitizedValue) {
+                        error = 'Подтверждение пароля обязательно';
                         validFields = false;
-                    } else if (sanitized !== passwordValue) {
-                        updatedFields[index].error = 'Пароли не совпадают';
+                    } else if (sanitizedValue !== passwordValue) {
+                        error = 'Пароли не совпадают';
                         validFields = false;
-                    } else {
-                        updatedFields[index].error = '';
                     }
                     break;
-
-                default:
-                    updatedFields[index].error = '';
             }
+
+            return {
+                ...field,
+                value: sanitizedValue,
+                error,
+            };
         });
 
-        setRegisterFields(updatedFields);
+        setRegisterFields(sanitizedFields);
         return validFields;
     }
 
+    async function signUpFirebase() {
+        const { register } = useAuthStore.getState()
+        const email = registerFields.find(field => {
+            if (field.name === 'email') {
+                return field
+            }
+        })?.value
+        const password = registerFields.find(field => {
+            if (field.name === 'password') {
+                return field
+            }
+        })?.value
+        const firstName = registerFields.find(field => {
+            if (field.name === 'first-name') {
+                return field
+            }
+        })?.value
+        const secondName = registerFields.find(field => {
+            if (field.name === 'first-name') {
+                return field
+            }
+        })?.value
+        const username = registerFields.find(field => {
+            if (field.name === 'first-name') {
+                return field
+            }
+        })?.value
+        const res = await register(firstName!, secondName!, username!, email!, password!)
+        if (res == 'success') {
+            router.replace('/')
+        }
+    }
     function submitForm(event: React.FormEvent) {
         event.preventDefault()
-        validateFields()
+        if (validateFields()) {
+            signUpFirebase()
+        }
     }
+    function handleInput(name: string, newValue: string) {
+        setRegisterFields(prevFields =>
+            prevFields.map(field =>
+                field.name === name
+                    ? { ...field, value: newValue } // заменяем только нужное поле
+                    : field                         // остальным ничего не делаем
+            )
+        );
+    }
+
     function switchPassType(newfield: Field) {
         const updatesFields = registerFields.map(field => {
             if (field.name === newfield.name) {
@@ -145,8 +193,6 @@ export default function Register() {
         })
         setRegisterFields(updatesFields)
     }
-
-
     return (
         <Container className={registerStyle.register} maxWidth="md" >
             <Paper variant="elevation" className={registerStyle['register-content']}>
@@ -165,6 +211,7 @@ export default function Register() {
                                         type={field.type}
                                         error={Boolean(field.error)}
                                         helperText={field.error}
+                                        onChange={(event) => { handleInput(field.name, event.target.value) }}
 
                                     />
                                     {
@@ -180,7 +227,10 @@ export default function Register() {
                             )
                         })}
                     </Grid>
-                    <Button variant="contained" type="submit">Войти</Button>
+                    <span>Уже с нами? <Button onClick={() => {
+                        router.replace('/login')
+                    }}>Войти</Button></span>
+                    <Button variant="contained" type="submit">Зарегестрироваться</Button>
                 </form>
             </Paper>
         </Container>

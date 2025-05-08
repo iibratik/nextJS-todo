@@ -32,7 +32,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "src/app/(protected)/dashboard/page.tsx", "src/app/components/Navbar.jsx"  ],
   "exclude": [
     "node_modules"
   ]

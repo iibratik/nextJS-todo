@@ -1,3 +1,4 @@
+"use client"
 import { AppBar, Box, Toolbar, Typography, Container, IconButton, Button } from "@mui/material"
 import { useUserStore } from "@/app/features/userStore"
 import { useAuthStore } from "@/app/features/authStore";
@@ -6,7 +7,7 @@ import { LightMode, DarkMode } from '@mui/icons-material/';
 import navbarStyle from "./navbar.module.scss"
 import { useRouter } from "next/navigation";
 
-export default function Navbar() {
+export default function NavbarComponent() {
     const user = useUserStore((state) => state.user);
     const router = useRouter()
     const { logout } = useAuthStore.getState()
@@ -17,7 +18,7 @@ export default function Navbar() {
     }
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" className={navbarStyle['navbar']}>
+            <AppBar className={navbarStyle['navbar']}>
                 <Toolbar>
                     <Container className={navbarStyle['navbar-content']}>
                         <div className="navbar-title">

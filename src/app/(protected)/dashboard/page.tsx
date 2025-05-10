@@ -5,7 +5,7 @@ import { useTaskStore } from '@/app/features/tasksStore';
 import { useEffect, useState, } from "react";
 import { useUserStore } from '@/app/features/userStore';
 
-import { TaskItem } from '@/app/components/TaskItem';
+import TaskItem from "../../components/TaskItem"
 import { Add } from '@mui/icons-material';
 
 import dashboardStyle from "./dashboard.module.scss"

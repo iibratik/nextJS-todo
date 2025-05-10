@@ -1,3 +1,4 @@
+
 import { useTaskStore } from "@/app/features/tasksStore";
 import { Task } from "@/types/task";
 import { Delete, Edit } from "@mui/icons-material";
@@ -9,7 +10,7 @@ type PropsType = {
     onTaskChange: () => void
 }
 
-export function TaskItem({ task, onTaskChange }: PropsType) {
+export default function TaskItem({ task, onTaskChange }: PropsType) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { setTaskStatus, editTask, deleteTask } = useTaskStore.getState()
     const [taskName, setTaskName] = useState('')

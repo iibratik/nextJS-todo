@@ -10,9 +10,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <head>
                 <title>NextJS To-do</title>
             </head>
+            <body>
             <ThemeRegistry>
                 {children}
             </ThemeRegistry>
+
+            </body>
         </html>
     )
 }

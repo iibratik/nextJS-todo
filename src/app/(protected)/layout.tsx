@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react';
 import { useUserStore } from '../features/userStore';
-// import Navbar from '@/app/components/Navbar';
+import Navbar from '@/app/components/NavbarComponent';
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
     const router = useRouter()
     const { userId, setUser } = useUserStore.getState()
@@ -22,8 +22,8 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
     }, [router, userId, setUser])
     return (
         <>
-            {/* <Navbar /> */}
-            <main style={{ 'marginTop': "2rem" }} >{children}</main>
+            <Navbar />
+            <main style={{ 'paddingTop': "5rem" }} >{children}</main>
         </>
     )
 }

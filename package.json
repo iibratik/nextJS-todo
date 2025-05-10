@@ -13,14 +13,18 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.0.2",
-    "@mui/material": "^7.0.2",
+    "@mui/material": "^7.1.0",
     "@mui/material-nextjs": "^7.0.2",
+    "@mui/x-data-grid": "^8.3.0",
+    "@mui/x-data-grid-premium": "^8.3.0",
     "antd": "^5.24.9",
     "firebase": "^11.6.1",
+    "framer-motion": "^12.10.4",
     "next": "15.3.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sass": "^1.87.0",
+    "tslint": "^5.20.1",
     "zustand": "^5.0.4"
   },
   "devDependencies": {
@@ -28,8 +32,11 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@typescript-eslint/parser": "^8.32.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.1",
-    "typescript": "^5"
+    "eslint-import-resolver-typescript": "^4.3.4",
+    "eslint-plugin-import": "^2.31.0",
+    "typescript": "^5.8.3"
   }
 }

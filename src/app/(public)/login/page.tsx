@@ -1,13 +1,12 @@
 "use client"
 
-import { Paper, Container, TextField, Button, Grid } from "@mui/material";
+import { Container, TextField, Button, Grid, Box } from "@mui/material";
 import loginStyle from './login.module.scss'
 import { useState } from "react";
 import { useRouter } from 'next/navigation';
 import { Field } from "@/types/field";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useAuthStore } from "../../features/authStore";
-// import { useUserStore } from "../features/userStore";
 
 
 export default function Login() {
@@ -97,7 +96,7 @@ export default function Login() {
 
     return (
         <Container className={loginStyle.login} maxWidth="md" >
-            <Paper variant="elevation" className={loginStyle['login-content']}>
+            <Box className={loginStyle['login-content']}>
                 <form onSubmit={handleSubmit} className={loginStyle["login-form"]}>
                     <h2 className={loginStyle['login-title']}>Вход</h2>
                     <div className={loginStyle["login-inputs"]}>
@@ -132,8 +131,7 @@ export default function Login() {
                 <span>Нет с нами? <Button variant="text" onClick={() => {
                     router.replace('/register')
                 }}> Регистрация</Button></span>
-
-            </Paper>
+            </Box>
         </Container>
     )
 }

@@ -1,6 +1,11 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
+    "baseUrl": "src/",
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    },
     "target": "ES2017",
     "lib": [
       "dom",
@@ -22,17 +27,14 @@
       {
         "name": "next"
       }
-    ],
-    "paths": {
-      "@/*": ["*"]
-    }
+    ]
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-, "src/app/(protected)/dashboard/page.tsx", "src/app/components/Navbar.jsx"  ],
+  ],
   "exclude": [
     "node_modules"
   ]

@@ -1,11 +1,12 @@
-import { auth } from '@/lib/firebase'
+import { auth } from '../..//lib/firebase'
 import { FirebaseError } from 'firebase/app'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { create } from 'zustand'
 import { useUserStore } from './userStore'
 
 interface AuthStore {
     login: (email: string, password: string) => Promise<string>,
+    logout: () => Promise<void>
     register: (firstName: string, secondName: string, username: string, email: string, password: string) => Promise<string>
 }
 
@@ -60,5 +61,17 @@ export const useAuthStore = create<AuthStore>(() => ({
             }
         }
         return resultReturn
-    }
+    },
+    logout: async () => {
+        const userStore = useUserStore.getState()
+        userStore.logout()
+        try {
+            await signOut(auth)
+        } catch (error) {
+            if (error instanceof FirebaseError) {
+                alert(error.code)
+            }
+        }
+
+    },
 }))

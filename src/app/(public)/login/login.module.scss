@@ -28,6 +28,9 @@
         transform: translate(-100%, -100%);
     }
     &-content {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        border: 1px solid #474747;
+
         padding: 20px;
         border-radius: 15px !important;
         overflow: hidden;

@@ -1,18 +1,23 @@
-import { create } from "zustand"
-import { persist } from "zustand/middleware"
-interface ThemeStore {
-    currentTheme: 'dark' | 'light',
-    setCurrentTheme: (newTheme: 'dark' | 'light') => void
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+
+type ThemeMode = 'light' | 'dark';
+
+interface ThemeState {
+    mode: ThemeMode;
+    setMode: (mode: ThemeMode) => void;
+    toggleMode: () => void;
 }
 
-export const useThemeStore = create<ThemeStore>()(
-    persist((set) => ({
-        currentTheme: 'light',
-        setCurrentTheme(newTheme) {
-            set({ currentTheme: newTheme })
+export const useThemeStore = create<ThemeState>()(
+    persist(
+        (set, get) => ({
+            mode: 'light',
+            setMode: (mode) => set({ mode }),
+            toggleMode: () => set({ mode: get().mode === 'light' ? 'dark' : 'light' }),
+        }),
+        {
+            name: 'theme-store',
         }
-    }), {
-        name: 'theme-store',
-        partialize: (state) => ({ currentTheme: state.currentTheme })
-    })
-)
+    )
+);

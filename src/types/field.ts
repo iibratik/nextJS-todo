@@ -7,9 +7,3 @@ export interface Field {
   value: string;
   error: string;
 }
-export interface User {
-  firstName: string,
-  secondName: string,
-  username: string,
-  userId: string
-}
